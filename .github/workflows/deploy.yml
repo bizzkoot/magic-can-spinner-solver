@@ -21,40 +21,17 @@ jobs:
           node-version: '18'
 
       - name: Clean Install Dependencies
-        run: |
-          npm ci || (rm -rf node_modules && npm install)
+        run: npm ci
         env:
           CI: true
 
       - name: Build
         run: |
-          # Remove old builds
           rm -rf .parcel-cache dist docs
-          
-          # Install additional needed transformer
-          npm install -D @parcel/transformer-vue
-          
-          # Build without the unsupported --verbose flag
-          npx parcel build --target default
-          
-          # Debug output
+          npx parcel@2.9.3 build --target default
           echo "Build complete, checking docs directory:"
           ls -la docs/ || true
-          
-          # Verify build output
-          if [ ! -f "docs/index.html" ]; then
-            echo "Trying alternative build path..."
-            mkdir -p docs
-            if [ -f "dist/index.html" ]; then
-              cp -r dist/* docs/
-            else
-              echo "Error: No build output found"
-              exit 1
-            fi
-          fi
-          
-          # Create 404 page
-          cp docs/index.html docs/404.html
+          [ -f "docs/index.html" ] && cp docs/index.html docs/404.html
         env:
           CI: true
           NODE_ENV: production
