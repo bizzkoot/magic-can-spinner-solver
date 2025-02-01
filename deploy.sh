@@ -8,9 +8,9 @@ error_exit() {
     exit 1
 }
 
-# Verify git config
-if ! git config user.name > /dev/null || ! git config user.email > /dev/null; then
-    error_exit "Git user.name or user.email not configured"
+# Verify source files exist
+if [ ! -f "index.html" ] || [ ! -f "script.js" ] || [ ! -f "vue_app.js" ] || [ ! -f "state.js" ]; then
+    error_exit "Required source files missing"
 fi
 
 # Create backup
@@ -25,10 +25,10 @@ rm -rf docs/ .cache/ node_modules/ dist/ || error_exit "Failed to clean up files
 
 # Install and build
 echo "Installing dependencies..."
-npm install || error_exit "npm install failed"
+PARCEL_WORKERS=1 npm install || error_exit "npm install failed"
 
 echo "Building project..."
-npm run build || error_exit "Build failed"
+PARCEL_WORKERS=1 npm run build || error_exit "Build failed"
 
 # Verify build artifacts
 if [ ! -d "docs" ] || [ ! -f "docs/index.html" ]; then
