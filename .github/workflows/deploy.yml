@@ -28,8 +28,19 @@ jobs:
 
       - name: Build
         run: |
+          # Ensure docs directory exists
+          mkdir -p docs
+          # Run build
           npm run build:prod
-          cp docs/index.html docs/404.html
+          # Wait a moment and verify files exist
+          ls -la docs/
+          # Copy index.html to 404.html if it exists
+          if [ -f "docs/index.html" ]; then
+            cp docs/index.html docs/404.html
+          else
+            echo "Error: docs/index.html not found"
+            exit 1
+          fi
         env:
           CI: true
 

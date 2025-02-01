@@ -6,8 +6,9 @@
   "source": "index.html",
   "scripts": {
     "clean": "rm -rf .parcel-cache dist docs",
-    "build": "npm run clean && parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs",
-    "build:prod": "npm run clean && parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs",
+    "prebuild": "mkdir -p docs",
+    "build": "parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs",
+    "build:prod": "npm run clean && npm run prebuild && parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs",
     "start": "parcel index.html --port 3000"
   },
   "dependencies": {
