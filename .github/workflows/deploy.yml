@@ -28,36 +28,40 @@ jobs:
 
       - name: Build
         run: |
-          # Ensure clean state
-          npm run clean
+          # Debug environment
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
           
-          # Create docs directory
+          # Clean and prepare
+          rm -rf .parcel-cache dist docs
           mkdir -p docs
           
-          # Run build with verbose logging
+          # Build with detailed output
           echo "Running production build..."
-          npm run build:prod -- --log-level verbose
+          NODE_ENV=production npx parcel build index.html \
+            --public-url ./bead-puzzle-solver/ \
+            --dist-dir docs \
+            --no-cache \
+            --log-level verbose \
+            --detailed-report
           
-          # Check build output
-          echo "Checking build output..."
-          if [ -d "docs" ] && [ "$(ls -A docs)" ]; then
-            echo "Build output:"
-            ls -la docs/
-          else
-            echo "Error: docs directory is empty"
+          # Verify build
+          echo "Build contents:"
+          ls -la docs/
+          
+          # Ensure index.html exists
+          if [ ! -f "docs/index.html" ]; then
+            echo "Error: index.html not found"
             exit 1
           fi
           
-          # Copy for SPA routing if index.html exists
-          if [ -f "docs/index.html" ]; then
-            cp docs/index.html docs/404.html
-          else
-            echo "Error: index.html not found in docs/"
-            exit 1
-          fi
+          # Copy for SPA routing
+          cp docs/index.html docs/404.html
+
         env:
           CI: true
           NODE_ENV: production
+          DEBUG: "*"
 
       - name: Create .nojekyll files
         run: |
