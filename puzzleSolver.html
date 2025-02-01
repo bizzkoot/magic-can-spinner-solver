@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bead Puzzle Solver</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        .container { display: flex; gap: 20px; padding: 20px; }
+        .column { display: flex; flex-direction: column-reverse; gap: 10px; }
+        .bead { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #333; }
+        .empty { background-color: transparent; border: 2px dashed #333; }
+        .controls { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        button { padding: 8px 16px; cursor: pointer; }
+        .input-grid { display: flex; gap: 10px; margin-bottom: 20px; }
+        .column-input { 
+            display: flex; 
+            flex-direction: column-reverse;  /* Restore the reverse direction */
+            gap: 5px; 
+        }
+        select { width: 60px; height: 30px; }
+        .solution-steps { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        .loading { color: blue; font-weight: bold; }
+        /* Add these styles for better visual feedback */
+        .error { color: red; margin-top: 10px; }
+        .bead.blue { background-color: blue; }
+        .bead.red { background-color: red; }
+        .bead.yellow { background-color: yellow; }
+        .bead.purple { background-color: purple; }
+        .bead.green { background-color: green; }
+        .bead.orange { background-color: orange; }
+        .quick-input {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .quick-input textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+        .error-text {
+            color: red;
+            font-size: 14px;
+        }
+        .state-display {
+            margin: 20px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+        }
+        .copy-area {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-family: monospace;
+            background: #fff;
+            min-height: 20px;
+        }
+        .copy-button {
+            margin: 5px 0;
+            padding: 5px 10px;
+        }
+        /* Add row indicators */
+        .row-labels {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 5px;
+            padding-top: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .row-label {
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="state-display">
+            <h3>Current State (Copy Format)</h3>
+            <div class="copy-area">{{ getCurrentStateAsString() }}</div>
+            <button class="copy-button" @click="copyCurrentState">Copy to Clipboard</button>
+        </div>
+
+        <div class="quick-input">
+            <h3>Quick Input</h3>
+            <p>Format: Enter comma-separated colors for each column (BOTTOM to TOP). Use 'null' for empty space.</p>
+            <p>Example for initial state (bottom to top):</p>
+            <p>blue,blue,blue,null|red,red,red|yellow,yellow,yellow|purple,purple,purple|green,green,green|orange,orange,orange</p>
+            <p>For scrambled state, put 'null' in the last position of the column where the empty space is:</p>
+            <p>green,blue,yellow,null|red,purple,red|blue,orange,blue|green,purple,red|orange,orange,green|yellow,purple,yellow</p>
+            <textarea v-model="quickInput" placeholder="Enter puzzle state..."></textarea>
+            <button @click="applyQuickInput" :disabled="solving">Apply Input</button>
+            <div v-if="quickInputError" class="error-text">{{ quickInputError }}</div>
+        </div>
+
+        <h3>Current Puzzle State:</h3>
+        <div class="input-grid">
+            <div class="row-labels">
+                <div class="row-label">Row 4</div>
+                <div class="row-label">Row 3</div>
+                <div class="row-label">Row 2</div>
+                <div class="row-label">Row 1</div>
+            </div>
+            <div v-for="(col, colIndex) in columns" :key="colIndex" class="column-input">
+                <template v-for="index in col.beads.length">
+                    <div :key="index">
+                        <select 
+                            v-model="columns[colIndex].beads[col.beads.length - index]"
+                            :disabled="solving"
+                            :class="{ 'empty-option': columns[colIndex].beads[col.beads.length - index] === null }">
+                            <option value="null" v-if="isSpecialSlot(colIndex, col.beads.length - index)">Empty</option>
+                            <option v-for="color in colors" 
+                                    :value="color" 
+                                    :disabled="color === null && !isSpecialSlot(colIndex, col.beads.length - index)">
+                                {{ color || 'Empty' }}
+                            </option>
+                        </select>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <button @click="solvePuzzle" :disabled="solving">
+            {{ solving ? 'Solving...' : 'Solve Puzzle' }}
+        </button>
+        <button @click="resetToInitial" :disabled="solving">Reset to Initial State</button>
+
+        <div v-if="solution.length > 0" class="solution-steps">
+            <h3>Solution Steps ({{ solution.length }} moves):</h3>
+            <div v-for="(step, index) in solution" :key="index">
+                <template v-if="step.moveNumber">
+                    <template v-if="step.type === 'rotate'">
+                        Step {{ step.moveNumber }}: Rotate Row {{ step.row+1 }} {{ step.direction === 'right' ? '↻ Right' : '↺ Left' }}
+                    </template>
+                    <template v-else-if="step.type === 'vertical'">
+                        Step {{ step.moveNumber }}: Move bead from Row {{ step.from+1 }} to Row {{ step.to+1 }} in Column {{ step.col+1 }}
+                    </template>
+                </template>
+                <template v-else>
+                    <template v-if="step.type === 'rotate'">
+                        Step {{ index+1 }}: Rotate Row {{ step.row+1 }} {{ step.direction === 'right' ? '↻ Right' : '↺ Left' }}
+                    </template>
+                    <template v-else-if="step.type === 'vertical'">
+                        Step {{ index+1 }}: Move bead from Row {{ step.from+1 }} to Row {{ step.to+1 }} in Column {{ step.col+1 }}
+                    </template>
+                </template>
+            </div>
+        </div>
+        <div v-if="error" class="error">{{ error }}</div>
+    </div>
+    <script type="module" src="http://127.0.0.1:8080/dist/script.js"></script>
+</body>
+</html>
