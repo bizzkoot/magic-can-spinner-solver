@@ -28,24 +28,29 @@ jobs:
 
       - name: Build
         run: |
-          # Debug environment
-          echo "Current directory: $(pwd)"
-          echo "Directory contents: $(ls -la)"
-          
-          # Clean up
+          # Remove old builds
           rm -rf .parcel-cache dist docs
-          mkdir -p docs
           
-          # Build
-          npm run build
+          # Install additional needed transformer
+          npm install -D @parcel/transformer-vue
           
-          # Debug build output
-          echo "Docs directory contents: $(ls -la docs)"
+          # Build with verbose output
+          npx parcel build --target default --verbose
+          
+          # Debug output
+          echo "Build complete, checking docs directory:"
+          ls -la docs/ || true
           
           # Verify build output
           if [ ! -f "docs/index.html" ]; then
-            echo "Error: index.html not found in docs/"
-            exit 1
+            echo "Trying alternative build path..."
+            mkdir -p docs
+            if [ -f "dist/index.html" ]; then
+              cp -r dist/* docs/
+            else
+              echo "Error: No build output found"
+              exit 1
+            fi
           fi
           
           # Create 404 page
@@ -53,6 +58,7 @@ jobs:
         env:
           CI: true
           NODE_ENV: production
+          DEBUG: "parcel:*"
 
       - name: Create .nojekyll files
         run: |

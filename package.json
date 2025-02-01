@@ -6,7 +6,7 @@
   "source": "index.html",
   "scripts": {
     "clean": "rm -rf .parcel-cache dist docs node_modules/.cache",
-    "build": "npx parcel build index.html",
+    "build": "parcel build --target default",
     "start": "parcel index.html --port 3000"
   },
   "dependencies": {
@@ -23,16 +23,10 @@
   ],
   "targets": {
     "default": {
-      "source": "index.html",
+      "source": ["index.html"],
       "distDir": "docs",
       "publicUrl": "/bead-puzzle-solver/",
-      "isLibrary": false,
-      "context": "browser",
-      "engines": {
-        "browsers": [
-          "last 2 Chrome versions"
-        ]
-      }
+      "isLibrary": false
     }
   }
 }
