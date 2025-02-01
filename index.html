@@ -151,6 +151,12 @@
         <div v-if="error" class="error">{{ error }}</div>
     </div>
     <!-- Move script above closing body tag -->
+    <script type="text/javascript">
+        // Ensure Vue is loaded
+        if (typeof Vue === 'undefined') {
+            console.error('Vue is not loaded!');
+        }
+    </script>
     <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>
