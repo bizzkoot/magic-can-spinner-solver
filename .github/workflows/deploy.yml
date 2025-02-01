@@ -28,6 +28,7 @@ jobs:
       - name: Build
         run: |
           rm -rf .parcel-cache dist docs
+          export NODE_OPTIONS=--max_old_space_size=4096
           npx parcel@2.9.3 build --target default
           echo "Build complete, checking docs directory:"
           ls -la docs/ || true
