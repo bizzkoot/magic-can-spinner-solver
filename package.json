@@ -6,9 +6,8 @@
   "source": "index.html",
   "scripts": {
     "clean": "rm -rf .parcel-cache dist docs",
-    "prebuild": "mkdir -p docs",
-    "build": "parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs --no-cache",
-    "build:prod": "npm run clean && parcel build index.html --public-url ./bead-puzzle-solver/ --dist-dir docs --no-cache",
+    "build": "parcel build",
+    "build:prod": "parcel build --no-cache",
     "start": "parcel index.html --port 3000"
   },
   "dependencies": {
@@ -25,12 +24,16 @@
   ],
   "targets": {
     "default": {
-      "source": "index.html",
-      "distDir": "./docs",
+      "source": ["index.html"],
+      "distDir": "docs",
       "publicUrl": "./bead-puzzle-solver/",
       "isLibrary": false,
       "context": "browser",
-      "outputFormat": "global"
+      "engines": {
+        "browsers": [
+          "last 2 Chrome versions"
+        ]
+      }
     }
   }
 }
