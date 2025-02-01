@@ -2,9 +2,8 @@
   "name": "bead-puzzle-solver",
   "version": "1.0.0",
   "description": "Bead Puzzle Solver",
-  "main": "main.js",
-  "homepage": ".",
   "private": true,
+  "source": "index.html",
   "scripts": {
     "clean": "rm -rf .parcel-cache dist docs",
     "build": "npm run clean && parcel build index.html --public-url ./ --dist-dir docs",
@@ -24,10 +23,11 @@
     "last 2 Chrome versions"
   ],
   "targets": {
-    "default": {
+    "main": {
       "source": "index.html",
       "distDir": "./docs",
-      "publicUrl": "./"
+      "publicUrl": "./",
+      "isLibrary": false
     }
   }
 }
