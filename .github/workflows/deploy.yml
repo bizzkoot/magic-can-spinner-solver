@@ -28,7 +28,11 @@ jobs:
 
       - name: Build
         run: |
-          npm run build
+          # Clean up
+          rm -rf .parcel-cache dist docs
+          
+          # Build
+          parcel build index.html --dist-dir docs --public-url ./bead-puzzle-solver/
           
           # Verify build output
           if [ ! -f "docs/index.html" ]; then
