@@ -34,8 +34,8 @@ jobs:
           # Install additional needed transformer
           npm install -D @parcel/transformer-vue
           
-          # Build with verbose output
-          npx parcel build --target default --verbose
+          # Build without the unsupported --verbose flag
+          npx parcel build --target default
           
           # Debug output
           echo "Build complete, checking docs directory:"
