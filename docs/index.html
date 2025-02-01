@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bead Puzzle Solver</title>
+    <!-- Remove the Vue CDN since we're using the bundled version -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
+    <style>.container { display: flex; gap: 20px; padding: 20px; }
+        .column { display: flex; flex-direction: column-reverse; gap: 10px; }
+        .bead { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #333; }
+        .empty { background-color: transparent; border: 2px dashed #333; }
+        .controls { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        button { padding: 8px 16px; cursor: pointer; }
+        .input-grid { display: flex; gap: 10px; margin-bottom: 20px; }
+        .column-input { 
+            display: flex; 
+            flex-direction: column-reverse;  /* Restore the reverse direction */
+            gap: 5px; 
+        }
+        select { width: 60px; height: 30px; }
+        .solution-steps { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        .loading { color: blue; font-weight: bold; }
+        /* Add these styles for better visual feedback */
+        .error { color: red; margin-top: 10px; }
+        .bead.blue { background-color: blue; }
+        .bead.red { background-color: red; }
+        .bead.yellow { background-color: yellow; }
+        .bead.purple { background-color: purple; }
+        .bead.green { background-color: green; }
+        .bead.orange { background-color: orange; }
+        .quick-input {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .quick-input textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+        .error-text {
+            color: red;
+            font-size: 14px;
+        }
+        .state-display {
+            margin: 20px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+        }
+        .copy-area {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-family: monospace;
+            background: #fff;
+            min-height: 20px;
+        }
+        .copy-button {
+            margin: 5px 0;
+            padding: 5px 10px;
+        }
+        /* Add row indicators */
+        .row-labels {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 5px;
+            padding-top: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .row-label {
+            height: 30px;
+            line-height: 30px;
+        }</style>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/javascript" src="script.31ae994f.js"></script>
+</body>
+</html>
