@@ -2,11 +2,13 @@
   "name": "bead-puzzle-solver",
   "version": "1.0.0",
   "description": "Bead Puzzle Solver",
-  "main": "script.js",
+  "main": "main.js",
   "homepage": ".",
+  "private": true,
   "scripts": {
-    "build": "rm -rf .cache dist && parcel build index.html --public-url ./ --dist-dir docs",
-    "build:prod": "parcel build index.html --public-url ./ --no-source-maps --dist-dir docs",
+    "clean": "rm -rf .parcel-cache dist docs",
+    "build": "npm run clean && parcel build index.html --public-url ./ --dist-dir docs",
+    "build:prod": "npm run clean && parcel build index.html --public-url ./ --no-source-maps --dist-dir docs",
     "start": "parcel index.html --port 3000"
   },
   "dependencies": {
@@ -20,5 +22,12 @@
   },
   "browserslist": [
     "last 2 Chrome versions"
-  ]
+  ],
+  "targets": {
+    "default": {
+      "source": "index.html",
+      "distDir": "./docs",
+      "publicUrl": "./"
+    }
+  }
 }
