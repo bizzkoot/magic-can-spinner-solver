@@ -13,10 +13,6 @@ if [ ! -f "index.html" ] || [ ! -f "script.js" ] || [ ! -f "vue_app.js" ] || [ !
     error_exit "Required source files missing"
 fi
 
-# Create backup
-echo "Creating backup..."
-cp -r docs/ docs_backup_$(date +%Y%m%d_%H%M%S) 2>/dev/null || true
-
 echo "Starting deployment process..."
 
 # Clean up

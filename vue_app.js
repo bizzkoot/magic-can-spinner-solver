@@ -1,3 +1,13 @@
+// Initial state definition - Each array represents a column, with beads from bottom to top
+const INITIAL_STATE = [
+    [null, 'blue', 'blue', 'blue'],      // Column 1 (has extra space at top)
+    ['red', 'red', 'red'],               // Column 2
+    ['yellow', 'yellow', 'yellow'],      // Column 3
+    ['purple', 'purple', 'purple'],      // Column 4
+    ['green', 'green', 'green'],         // Column 5
+    ['orange', 'orange', 'orange']       // Column 6
+];
+
 import { stateData, resetToInitial } from './state.js';
 import { isValidMove, moveVertical, rotateRow } from './move.js';
 import { findSolution, bfsSearch, depthLimitedSearch, getSmartMoves, generateHorizontalMoves, moveLeadsToTarget, calculateBeadDistances } from './search.js';
@@ -12,7 +22,17 @@ const blob = new Blob([workerCode], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(blob);
 
 export default {
-    data: () => stateData,
+    data: () => ({
+        ...stateData,
+        initialState: null,
+        columns: [],
+        colors: ['blue', 'red', 'yellow', 'purple', 'green', 'orange'],
+        solving: false,
+        error: null,
+        solution: [],
+        quickInput: '',
+        quickInputError: null
+    }),
     methods: {
         isSpecialSlot(colIndex, rowIndex) {
             // Only allow empty slot in Column 1's Row 4 (index 3)
@@ -709,8 +729,11 @@ export default {
         }
     },
     created() {
-        // Make a deep copy of the initial state
-        this.columns = JSON.parse(JSON.stringify(INITIAL_STATE.map(col => ({ beads: col }))));
+        // Initialize columns with the initial state
+        this.columns = INITIAL_STATE.map(col => ({
+            beads: [...col] // Create a new array for each column
+        }));
+        // Store the initial state for reset functionality
         this.initialState = JSON.parse(JSON.stringify(this.columns));
         console.log('Initial state:', this.getCurrentStateAsString());
     },
