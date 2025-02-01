@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Bead Puzzle Solver",
   "main": "script.js",
+  "homepage": ".",
   "scripts": {
-    "build": "parcel build script.js",
-    "start": "parcel script.js"
+    "build": "parcel build script.js --public-url ./",
+    "start": "parcel script.js --port 3000"
   },
   "dependencies": {
     "vue": "^3.5.13"
