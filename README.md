@@ -171,3 +171,59 @@ npm run lint
 ```bash
 npm test
 ```
+
+## Deployment Process
+
+### Manual Deployment Steps
+```bash
+# 1. Clean up old build files
+git rm -rf docs/        # Remove old docs folder from git
+rm -rf docs/           # Remove docs folder physically
+rm -rf node_modules/   # Clean node_modules
+rm -rf .cache/        # Clean Parcel cache
+
+# 2. Fresh installation
+npm install
+
+# 3. Build the project
+npm run build
+
+# 4. Add and commit changes
+git add docs/
+git commit -m "build: Update production build"
+git push origin main
+```
+
+### Automated Deployment Script
+Create a file called `deploy.sh` in your project root:
+
+```bash
+#!/bin/bash
+# Clean up
+git rm -rf docs/
+rm -rf docs/
+rm -rf node_modules/
+rm -rf .cache/
+
+# Install and build
+npm install
+npm run build
+
+# Git operations
+git add docs/
+git commit -m "build: Update production build"
+git push origin main
+
+echo "Deployment complete! Wait a few minutes for GitHub Pages to update."
+```
+
+To use the automated script:
+```bash
+# Make the script executable
+chmod +x deploy.sh
+
+# Run the deployment
+./deploy.sh
+```
+
+Note: After pushing changes, wait a few minutes for GitHub Pages to update. The site will be available at your GitHub Pages URL.
