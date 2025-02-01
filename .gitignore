@@ -1,5 +1,6 @@
 node_modules/
 package-lock.json
 .cache/
-gh-pages/
 .DS_Store
+# Remove or comment out any docs-related ignores if they exist
+# docs/
