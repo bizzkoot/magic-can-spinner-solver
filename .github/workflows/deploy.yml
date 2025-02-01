@@ -28,19 +28,31 @@ jobs:
 
       - name: Build
         run: |
-          # Ensure docs directory exists
-          mkdir -p docs
+          # Clean and rebuild
+          npm run clean
+          rm -rf dist
+          
           # Run build
           npm run build:prod
-          # Wait a moment and verify files exist
-          ls -la docs/
-          # Copy index.html to 404.html if it exists
-          if [ -f "docs/index.html" ]; then
-            cp docs/index.html docs/404.html
-          else
-            echo "Error: docs/index.html not found"
-            exit 1
+          
+          # Debug directory contents
+          echo "Current directory:"
+          ls -la
+          echo "Docs directory:"
+          ls -la docs || true
+          
+          # Ensure docs directory has content
+          if [ ! -f "docs/index.html" ]; then
+            echo "Building failed - trying alternative build"
+            npm run build
+            if [ ! -f "docs/index.html" ]; then
+              echo "Error: Build failed to produce index.html"
+              exit 1
+            fi
           fi
+          
+          # Copy for SPA routing
+          cp docs/index.html docs/404.html
         env:
           CI: true
 
