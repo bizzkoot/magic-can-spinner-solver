@@ -28,33 +28,16 @@ jobs:
 
       - name: Build
         run: |
-          # Debug environment
-          echo "Node version: $(node -v)"
-          echo "NPM version: $(npm -v)"
+          npm run build
           
-          # Clean and prepare
-          rm -rf .parcel-cache dist docs
-          mkdir -p docs
-          
-          # Run build
-          echo "Running production build..."
-          NODE_ENV=production npx parcel build index.html \
-            --dist-dir docs \
-            --public-url ./bead-puzzle-solver/ \
-            --no-cache \
-            --log-level verbose
-          
-          # Debug output
-          echo "Build contents:"
-          ls -la docs/
-          
-          # Verify and copy files
-          if [ -f "docs/index.html" ]; then
-            cp docs/index.html docs/404.html
-          else
+          # Verify build output
+          if [ ! -f "docs/index.html" ]; then
             echo "Error: index.html not found in docs/"
             exit 1
           fi
+          
+          # Create 404 page
+          cp docs/index.html docs/404.html
         env:
           CI: true
           NODE_ENV: production

@@ -5,5 +5,8 @@
     "*.vue": ["@parcel/transformer-vue"],
     "*.html": ["@parcel/transformer-html"]
   },
-  "reporters": ["@parcel/reporter-cli"]
+  "reporters": ["@parcel/reporter-cli"],
+  "builders": {
+    "*.html": ["@parcel/builder-default"]
+  }
 }
