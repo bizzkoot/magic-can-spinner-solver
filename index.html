@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Bead Puzzle Solver</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <!-- Change Vue CDN to specific version 2.6.14 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
         .container { display: flex; gap: 20px; padding: 20px; }
         .column { display: flex; flex-direction: column-reverse; gap: 10px; }
@@ -149,6 +150,7 @@
         </div>
         <div v-if="error" class="error">{{ error }}</div>
     </div>
-    <script src="./script.js"></script>
+    <!-- Move script above closing body tag -->
+    <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>
