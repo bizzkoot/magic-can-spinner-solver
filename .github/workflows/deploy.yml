@@ -32,8 +32,12 @@ jobs:
         env:
           CI: true
 
-      - name: Create .nojekyll file
+      - name: Create .nojekyll files
         run: |
+          # Create .nojekyll in root
+          touch .nojekyll
+          # Create .nojekyll in docs directory
+          mkdir -p docs
           touch docs/.nojekyll
 
       - name: Deploy to GitHub Pages
