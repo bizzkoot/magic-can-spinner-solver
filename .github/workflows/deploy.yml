@@ -28,11 +28,19 @@ jobs:
 
       - name: Build
         run: |
+          # Debug environment
+          echo "Current directory: $(pwd)"
+          echo "Directory contents: $(ls -la)"
+          
           # Clean up
           rm -rf .parcel-cache dist docs
+          mkdir -p docs
           
           # Build
-          parcel build index.html --dist-dir docs --public-url ./bead-puzzle-solver/
+          npm run build
+          
+          # Debug build output
+          echo "Docs directory contents: $(ls -la docs)"
           
           # Verify build output
           if [ ! -f "docs/index.html" ]; then
