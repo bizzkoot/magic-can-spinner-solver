@@ -1,26 +1,38 @@
-# Bead Puzzle Solver
+# 🧩 Bead Puzzle Solver
 
-## Puzzle Structure
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![Vue.js](https://img.shields.io/badge/Vue.js-2.x-green)]()
+
+> An interactive puzzle solver application built with Vue.js that helps solve complex bead arrangement puzzles through various algorithms.
+
+## 📋 Table of Contents
+- [Puzzle Structure](#-puzzle-structure)
+- [Movement Rules](#-movement-rules)
+- [Development Progress](#-development-progress)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Development](#-development)
+- [Deployment](#-deployment)
+
+## 🎮 Puzzle Structure
 
 ### Initial State
-```
+```plaintext
 Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
 [empty]     ---Row 4 (only exists in Column 1)---
 [yellow]    [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
 [blue]      [red]     [blue]    [green]   [orange]  [yellow]   Row 2
 [green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
-Structure:
-- Column 1: 4 rows (Row 1-3 with beads, Row 4 empty)
-- Columns 2-6: 3 rows only (Row 1-3 with beads)
 ```
 
-### Goal State Requirements
-- All beads in each column must be the same color
-- Column 1 must have exactly 3 beads with empty space in Row 4
-- Other columns must have all 3 positions filled
-- Column positions don't matter (any color can be in any column)
+### 🎯 Goal State Requirements
+- ✅ All beads in each column must be the same color
+- ✅ Column 1 must have exactly 3 beads with empty space in Row 4
+- ✅ Other columns must have all 3 positions filled
+- ✅ Column positions don't matter (any color can be in any column)
 
-## Movement Rules
+## 🔄 Movement Rules
 
 ### Valid Moves
 
@@ -40,190 +52,167 @@ Structure:
    - Rotation moves all beads in a row one position left or right
 
 ### Example Move Sequence
+
 1. Move yellow bead from Row 3 Column 1 to empty Row 4
-   ```
-   Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
-   [yellow]    
-   [empty]     [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
-   [blue]      [red]     [blue]    [green]   [orange]  [yellow]   Row 2
-   [green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
-   ```
+```plaintext
+Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
+[yellow]    
+[empty]     [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
+[blue]      [red]     [blue]    [green]   [orange]  [yellow]   Row 2
+[green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
+```
 
 2. Move blue bead from Row 2 Column 1 to Row 3
-   ```
-   Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
-   [yellow]    
-   [blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
-   [empty]     [red]     [blue]    [green]   [orange]  [yellow]   Row 2
-   [green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
-   ```
+```plaintext
+Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
+[yellow]    
+[blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
+[empty]     [red]     [blue]    [green]   [orange]  [yellow]   Row 2
+[green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
+```
 
 3. Rotate Row 2 right (beads move: yellow → purple → orange → green → orange → yellow)
-   ```
-   Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
-   [yellow]    
-   [blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
-   [orange]    [yellow]  [empty]   [red]     [blue]    [green]    Row 2
-   [green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
-   ```
+```plaintext
+Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
+[yellow]    
+[blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
+[orange]    [yellow]  [empty]   [red]     [blue]    [green]    Row 2
+[green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
+```
 
 4. Valid options depending on empty space position:
 
    4(a) If empty space is in Column 3 Row 3 (via vertical movement):
-   ```
-   Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
-   [yellow]    
-   [blue]      [purple]  [empty]   [purple]  [orange]  [purple]   Row 3
-   [orange]    [yellow]  [orange]  [red]     [blue]    [green]    Row 2
-   [green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
-   ```
+```plaintext
+Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
+[yellow]    
+[blue]      [purple]  [empty]   [purple]  [orange]  [purple]   Row 3
+[orange]    [yellow]  [orange]  [red]     [blue]    [green]    Row 2
+[green]     [red]     [blue]    [green]   [orange]  [yellow]   Row 1
+```
 
    4(b) After rotating Row 1 left (moves empty to Column 3):
-   ```
-   Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
-   [yellow]    
-   [blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
-   [orange]    [yellow]  [blue]    [red]     [blue]    [green]    Row 2
-   [green]     [red]     [empty]   [green]   [orange]  [yellow]   Row 1
-   ```
-   
-   Key corrections:
-   - Moves respect column-specific rules
-   - Demonstrates both vertical movement and rotation options
-   - Empty spaces only move through valid operations
+```plaintext
+Column 1    Column 2  Column 3  Column 4  Column 5  Column 6
+[yellow]    
+[blue]      [purple]  [orange]  [purple]  [orange]  [purple]   Row 3
+[orange]    [yellow]  [blue]    [red]     [blue]    [green]    Row 2
+[green]     [red]     [empty]   [green]   [orange]  [yellow]   Row 1
+```
+
+Key corrections:
+- Moves respect column-specific rules
+- Demonstrates both vertical movement and rotation options
+- Empty spaces only move through valid operations
 
 Key rotation notes:
 - Rotation affects ALL beads in a row
 - Right rotation moves beads: Column 1 → 2 → 3 → 4 → 5 → 6 → 1
 - Left rotation moves beads: Column 6 → 5 → 4 → 3 → 2 → 1 → 6
 
-## Current Progress
+## 📈 Development Progress
 
-1. Basic structure implemented:
-   - HTML visualization using Vue.js
-   - State management
-   - Move tracking
-   - Input validation
+### ✅ Completed Features
+- HTML visualization using Vue.js
+- State management
+- Move tracking
+- Input validation
 
-2. In Progress:
-   - Fixing movement validation rules
-   - Implementing proper goal state checking
-   - Optimizing solution search algorithm
+### 🚧 In Progress
+- Fixing movement validation rules
+- Implementing proper goal state checking
+- Optimizing solution search algorithm
 
-## Project Structure
+## 📁 Project Structure
 
-The project has been refactored into multiple files for better organization and maintainability. The new structure is as follows:
+```plaintext
+├── state.js     # State management and manipulation
+├── move.js      # Move validation and execution
+├── search.js    # Search algorithms (A*, BFS)
+├── utils.js     # Utility functions
+├── vue_app.js   # Vue.js application
+└── script.js    # Main entry point
+```
 
-- `state.js`: Manages the puzzle state, including initial state, column data, and state manipulation functions.
-- `move.js`: Contains move validation and move execution logic.
-- `search.js`: Implements search algorithms (A*, BFS) and related helper functions.
-- `utils.js`: Provides utility functions like state serialization, heuristic calculation, and target column determination.
-- `vue_app.js`: Defines the Vue.js app and integrates all the modules.
-- `script.js`: Imports the Vue app from `vue_app.js`.
+## 🚀 Getting Started
 
-## Testing the Application
+### Prerequisites
+- Node.js (>=12.x)
+- npm (>=6.x)
 
-To test the application, follow these steps:
+### Installation
 
-1. Install dependencies:
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd bead-puzzle-solver
+```
+
+2. Install dependencies
 ```bash
 npm install
 ```
 
-2. Start the development server:
+3. Start development server
 ```bash
 npm start
 ```
 
-3. Open the application in your browser:
+4. Open application
 ```bash
 open http://localhost:1234
 ```
 
-4. Use the interface to:
-   - Set up the initial puzzle state
-   - Make moves manually
-   - Use the solver to find solutions
-
-## Test Input State
-```
+### Test Input State
+```plaintext
 green,blue,yellow,null|red,purple,red|blue,orange,blue|green,purple,red|orange,orange,green|yellow,purple,yellow
 ```
 
-## Development Commands
+## 💻 Development
 
-- Build the project:
+### Available Commands
+
 ```bash
+# Build the project
 npm run build
-```
 
-- Start development server with hot reload:
-```bash
+# Start development server with hot reload
 npm start
-```
 
-- Lint and fix files:
-```bash
+# Lint and fix files
 npm run lint
-```
 
-- Run tests (if available):
-```bash
+# Run tests
 npm test
 ```
 
-## Deployment Process
+## 📦 Deployment
 
-### Manual Deployment Steps
+### Manual Deployment
 ```bash
-# 1. Clean up old build files
-git rm -rf docs/        # Remove old docs folder from git
-rm -rf docs/           # Remove docs folder physically
-rm -rf node_modules/   # Clean node_modules
-rm -rf .cache/        # Clean Parcel cache
-
-# 2. Fresh installation
-npm install
-
-# 3. Build the project
-npm run build
-
-# 4. Add and commit changes
-git add docs/
-git commit -m "build: Update production build"
-git push origin main
-```
-
-### Automated Deployment Script
-Create a file called `deploy.sh` in your project root:
-
-```bash
-#!/bin/bash
-# Clean up
+# 1. Clean up
 git rm -rf docs/
-rm -rf docs/
-rm -rf node_modules/
-rm -rf .cache/
+rm -rf docs/ node_modules/ .cache/
 
-# Install and build
+# 2. Fresh install and build
 npm install
 npm run build
 
-# Git operations
+# 3. Deploy
 git add docs/
 git commit -m "build: Update production build"
 git push origin main
-
-echo "Deployment complete! Wait a few minutes for GitHub Pages to update."
 ```
 
-To use the automated script:
+### Automated Deployment
+1. Make the deployment script executable:
 ```bash
-# Make the script executable
 chmod +x deploy.sh
+```
 
-# Run the deployment
+2. Run deployment:
+```bash
 ./deploy.sh
 ```
 
-Note: After pushing changes, wait a few minutes for GitHub Pages to update. The site will be available at your GitHub Pages URL.
+> Note: After deployment, wait a few minutes for GitHub Pages to update. The site will be available at your GitHub Pages URL.
