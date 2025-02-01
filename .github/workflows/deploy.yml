@@ -32,6 +32,10 @@ jobs:
         env:
           CI: true
 
+      - name: Create .nojekyll file
+        run: |
+          touch docs/.nojekyll
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
