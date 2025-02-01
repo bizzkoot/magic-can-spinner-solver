@@ -1,22 +1,10 @@
-/* global Vue */
-// Make sure Vue is global
-window.Vue = Vue;
-
 import Vue from 'vue';
 import App from './vue_app.js';
 
+// Remove this line since we're not using global Vue
+// window.Vue = Vue;
+
 new Vue({
   el: '#app',
-  data() {
-    return {
-      columns: [],
-      colors: ['blue', 'red', 'yellow', 'purple', 'green', 'orange', null],
-      solving: false,
-      solution: [],
-      error: null,
-      quickInput: '',
-      quickInputError: null
-    }
-  },
   render: h => h(App)
-}).$mount('#app');
+});

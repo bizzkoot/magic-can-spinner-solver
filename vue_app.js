@@ -709,7 +709,8 @@ export default {
         }
     },
     created() {
-        // Store initial state
+        // Make a deep copy of the initial state
+        this.columns = JSON.parse(JSON.stringify(INITIAL_STATE.map(col => ({ beads: col }))));
         this.initialState = JSON.parse(JSON.stringify(this.columns));
         console.log('Initial state:', this.getCurrentStateAsString());
     },

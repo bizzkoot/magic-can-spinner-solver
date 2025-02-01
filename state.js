@@ -1,5 +1,5 @@
 const INITIAL_STATE = [
-    ['blue', 'blue', 'blue', null],
+    ['blue', 'blue', 'blue', null], // null should be last (top position)
     ['red', 'red', 'red'],
     ['yellow', 'yellow', 'yellow'],
     ['purple', 'purple', 'purple'],
