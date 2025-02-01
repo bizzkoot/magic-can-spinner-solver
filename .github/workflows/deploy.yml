@@ -29,15 +29,13 @@ jobs:
       - name: Build
         run: |
           npm run build:prod
+          cp docs/index.html docs/404.html
         env:
           CI: true
 
       - name: Create .nojekyll files
         run: |
-          # Create .nojekyll in root
           touch .nojekyll
-          # Create .nojekyll in docs directory
-          mkdir -p docs
           touch docs/.nojekyll
 
       - name: Deploy to GitHub Pages
