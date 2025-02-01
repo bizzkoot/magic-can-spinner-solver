@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 # Remove or comment out any docs-related ignores if they exist
 # docs/
+.parcel-cache/
