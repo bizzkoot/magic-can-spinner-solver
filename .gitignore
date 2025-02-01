@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 .cache/
 .DS_Store
 # Remove or comment out any docs-related ignores if they exist
